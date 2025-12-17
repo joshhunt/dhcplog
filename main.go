@@ -42,6 +42,30 @@ func dhcpRequestedIP(dhcp *layers.DHCPv4) string {
 	return ""
 }
 
+func formatDHCPOptionValue(opt layers.DHCPOption) string {
+	// Use the built-in String() method and extract just the value part
+	// The format is "Option(TYPE:VALUE)" so we extract the value
+	str := opt.String()
+
+	// Find the colon and closing paren
+	colonIdx := -1
+	for i, c := range str {
+		if c == ':' {
+			colonIdx = i
+			break
+		}
+	}
+
+	if colonIdx == -1 || colonIdx >= len(str)-2 {
+		// Fallback: just show hex
+		return fmt.Sprintf("%x", opt.Data)
+	}
+
+	// Extract the value between : and )
+	value := str[colonIdx+1 : len(str)-1]
+	return value
+}
+
 func logfmt(k string, v interface{}) string {
 	switch val := v.(type) {
 	case string:
@@ -134,6 +158,20 @@ func main() {
 		}
 		if host != "" {
 			fields = append(fields, logfmt("hostname", host))
+		}
+
+		// Add all DHCP options with opt_ prefix
+		for _, opt := range dhcp.Options {
+			// Skip options we've already logged separately
+			if opt.Type == layers.DHCPOptMessageType || opt.Type == layers.DHCPOptHostname || opt.Type == layers.DHCPOptRequestIP {
+				continue
+			}
+			if len(opt.Data) == 0 {
+				continue
+			}
+			optName := fmt.Sprintf("opt_%d", opt.Type)
+			optValue := formatDHCPOptionValue(opt)
+			fields = append(fields, logfmt(optName, optValue))
 		}
 
 		fmt.Println(joinNonEmpty(fields))
