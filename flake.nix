@@ -26,8 +26,8 @@
 
             package = mkOption {
               type = types.package;
-              default = self.packages.${pkgs.system}.default;
-              defaultText = literalExpression "self.packages.\${pkgs.system}.default";
+              default = self.packages.${pkgs.stdenv.hostPlatform.system}.default;
+              defaultText = literalExpression "self.packages.\${pkgs.stdenv.hostPlatform.system}.default";
               description = "The dhcplog package to use";
             };
           };
