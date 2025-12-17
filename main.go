@@ -170,7 +170,7 @@ func main() {
 			if len(opt.Data) == 0 {
 				continue
 			}
-			optName := fmt.Sprintf("opt_%d", opt.Type)
+			optName := fmt.Sprintf("opt_%s", opt.Type.String())
 			optValue := formatDHCPOptionValue(opt)
 			fields = append(fields, logfmt(optName, optValue))
 		}
