@@ -54,13 +54,15 @@
                 ProtectKernelTunables = true;
                 ProtectKernelModules = true;
                 ProtectControlGroups = true;
-                RestrictAddressFamilies = [ "AF_PACKET" "AF_INET" "AF_INET6" ];
+                RestrictAddressFamilies = [ "AF_PACKET" "AF_INET" "AF_INET6" "AF_NETLINK" ];
                 RestrictNamespaces = true;
                 LockPersonality = true;
                 MemoryDenyWriteExecute = true;
                 RestrictRealtime = true;
                 RestrictSUIDSGID = true;
                 PrivateMounts = true;
+                # Don't use private network namespace - we need access to real interfaces
+                PrivateNetwork = false;
               };
             };
           };
