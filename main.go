@@ -46,24 +46,25 @@ func formatDHCPOptionValue(opt layers.DHCPOption) string {
 	// Use the built-in String() method and extract just the value part
 	// The format is "Option(TYPE:VALUE)" so we extract the value
 	str := opt.String()
+	return str
 
-	// Find the colon and closing paren
-	colonIdx := -1
-	for i, c := range str {
-		if c == ':' {
-			colonIdx = i
-			break
-		}
-	}
+	// // Find the colon and closing paren
+	// colonIdx := -1
+	// for i, c := range str {
+	// 	if c == ':' {
+	// 		colonIdx = i
+	// 		break
+	// 	}
+	// }
 
-	if colonIdx == -1 || colonIdx >= len(str)-2 {
-		// Fallback: just show hex
-		return fmt.Sprintf("%x", opt.Data)
-	}
+	// if colonIdx == -1 || colonIdx >= len(str)-2 {
+	// 	// Fallback: just show hex
+	// 	return fmt.Sprintf("%x", opt.Data)
+	// }
 
-	// Extract the value between : and )
-	value := str[colonIdx+1 : len(str)-1]
-	return value
+	// // Extract the value between : and )
+	// value := str[colonIdx+1 : len(str)-1]
+	// return value
 }
 
 func logfmt(k string, v interface{}) string {
